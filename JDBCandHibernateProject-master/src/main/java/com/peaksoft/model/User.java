@@ -2,7 +2,12 @@ package com.peaksoft.model;
 
 import javax.persistence.*;
 
+<<<<<<< HEAD
 @Table
+=======
+@Entity
+@Table(name = "users")
+>>>>>>> 9aba5b7 (Initial commit)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,7 +16,11 @@ public class User {
     @Column
     private String name;
 
+<<<<<<< HEAD
     @Column
+=======
+    @Column(name = "last_name")
+>>>>>>> 9aba5b7 (Initial commit)
     private String lastName;
 
     @Column
