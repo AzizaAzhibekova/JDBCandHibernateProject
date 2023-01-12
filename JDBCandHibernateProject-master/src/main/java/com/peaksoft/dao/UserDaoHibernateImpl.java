@@ -1,22 +1,15 @@
 package com.peaksoft.dao;
 
 
-
 import com.peaksoft.model.User;
-<<<<<<< HEAD
-
-import java.util.List;
-
-=======
 import com.peaksoft.util.Util;
-import org.hibernate.*;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
+import javax.persistence.Query;
 import java.util.List;
 
-
-
->>>>>>> 9aba5b7 (Initial commit)
 public class UserDaoHibernateImpl implements UserDao {
 
     public UserDaoHibernateImpl() {
@@ -25,26 +18,23 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        String sql= "CREATE TABLE IF NOT EXISTS users " +
+        String sql = "CREATE TABLE IF NOT EXISTS users " +
                 "(id BIGSERIAL PRIMARY KEY, " +
                 "name VARCHAR(255)," +
-                 "last_name VARCHAR(255), " +
+                "last_name VARCHAR(255), " +
                 "age INT2);";
-        Session session= Util.getSessionFactory().openSession();
+        Session session = Util.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             session.createSQLQuery(sql).executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             session.close();
         }
 
     }
-
-
-
 
 
     @Override
@@ -55,7 +45,7 @@ public class UserDaoHibernateImpl implements UserDao {
         String sql = "DROP TABLE IF EXISTS users";
 
         Query query = session.createSQLQuery(sql).addEntity(User.class);
-
+        query.executeUpdate();
         transaction.commit();
         session.close();
 
@@ -80,12 +70,6 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
 
-
-
-
-
-
-
     @Override
     public void removeUserById(long id) {
         Session session = Util.getSessionFactory().openSession();
@@ -98,20 +82,19 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
 
-
-
     @Override
     public List<User> getAllUsers() {
         Session session = Util.getSessionFactory().openSession();
         session.beginTransaction();
-       List<User> users = session.createQuery("FROM User").list();
-       session.getTransaction().commit();
+        List<User> users = session.createQuery("FROM User").list();
+        session.getTransaction().commit();
         session.close();
         return users;
     }
+
     @Override
     public void cleanUsersTable() {
-       Session session =Util.getSessionFactory().openSession();
+        Session session = Util.getSessionFactory().openSession();
         session.beginTransaction();
         session.createSQLQuery("TRUNCATE TABLE users").executeUpdate();
         session.getTransaction().commit();
